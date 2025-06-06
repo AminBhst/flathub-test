@@ -6,6 +6,7 @@ runtime-version: '24.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.llvm19
+  - org.freedesktop.Sdk.Extension.rust-stable
 command: brisk
 finish-args:
   - --socket=fallback-x11
@@ -14,7 +15,6 @@ finish-args:
   - --share=ipc
   - --device=dri
   - --filesystem=xdg-download
-  - --filesystem=~/.config/autostart:create
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.kde.StatusNotifierWatcher
 cleanup:
@@ -55,9 +55,8 @@ modules:
     sources:
       - pubspec-sources.json
       - type: git
-        url: https://github.com/BrisklyDev/brisk.git
+        url: https://github.com/AminBhst/brisk-dev.git
         tag: v2.2.5
-        branch: main
-        commit: a50f57f34f72d84bd7a060767d47947a32b9c0ed
+        commit: e2ab38321b923e726909a23e4055861f74386080
     modules:
       - flutter-sdk-3.32.0.json
