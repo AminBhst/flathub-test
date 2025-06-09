@@ -14,7 +14,6 @@ finish-args:
   - --share=ipc
   - --device=dri
   - --filesystem=xdg-download
-  - --filesystem=~/.config/autostart:create
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.kde.StatusNotifierWatcher
 cleanup:
@@ -37,12 +36,13 @@ modules:
         aarch64:
           env:
             BUNDLE_PATH: build/linux/arm64/release/bundle
-      append-path: /usr/lib/sdk/llvm19/bin:/var/lib/flutter/bin
+      append-path: /usr/lib/sdk/llvm19/bin:/var/lib/rustup/bin:/var/lib/flutter/bin
       prepend-ld-library-path: /usr/lib/sdk/llvm19/lib
       env:
+        CARGO_HOME: /run/build/Brisk/cargo
+        RUSTUP_HOME: /var/lib/rustup
         PUB_CACHE: /run/build/Brisk/.pub-cache
     build-commands:
-      - setup-flutter.sh -C .
       - setup-flutter.sh -C .
       - flutter build linux --release
       - install -Dm644 .github/io.github.BrisklyDev.Brisk.appdata.xml /app/share/appdata/io.github.BrisklyDev.Brisk.appdata.xml
@@ -50,14 +50,20 @@ modules:
       - cp -r $BUNDLE_PATH/lib /app/bin/lib
       - cp -r $BUNDLE_PATH/data /app/bin/data
       - install -Dm644 assets/icons/logo-128.png /app/share/icons/hicolor/128x128/apps/io.github.BrisklyDev.Brisk.png
+      - install -Dm644 assets/icons/tray-inactive-dark.png /app/share/icons/hicolor/128x128/apps/io.github.BrisklyDev.Brisk.trayInactiveDark.png
+      - install -Dm644 assets/icons/tray-inactive-light.png /app/share/icons/hicolor/128x128/apps/io.github.BrisklyDev.Brisk.trayInactiveLight.png
+      - install -Dm644 assets/icons/tray-active.png /app/share/icons/hicolor/128x128/apps/io.github.BrisklyDev.Brisk.trayActive.png
       - desktop-file-edit linux/brisk.desktop --set-icon=io.github.BrisklyDev.Brisk
       - install -Dm644 linux/brisk.desktop /app/share/applications/io.github.BrisklyDev.Brisk.desktop
     sources:
       - pubspec-sources.json
+      - cargo-sources.json
       - type: git
-        url: https://github.com/BrisklyDev/brisk.git
-        tag: v2.2.5
-        branch: main
-        commit: a50f57f34f72d84bd7a060767d47947a32b9c0ed
+        url: https://github.com/AminBhst/brisk-dev.git
+        tag: v2.3.1
+        commit: 97aabfb4fad45238ce84a37a48cb641736f93e4b
+      - type: patch
+        path: run_build_tool.sh.offline.patch
     modules:
       - flutter-sdk-3.32.0.json
+      - rustup-1.83.0.json
